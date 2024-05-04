@@ -1,42 +1,45 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Modal, Button } from 'react-bootstrap';
 import './Modal.css';
 
+const MyModal = ({ buttonText, modalTitle, modalContent, backText, startText }) => {
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
 
-const Modal = ({ buttonText, modalTitle, modalContent, backText, startText }) => {
-    const history = useHistory();
-
-    const handleNextClick = (route) => {
-        // Close modal here
-
-        history.push(route);
-    };
-
-    return (
-      <>
-        <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          {buttonText}
-        </button>
-  
-        <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h1 className="modal-title fs-5" id="exampleModalLabel">{modalTitle}</h1>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div className="modal-body">
-                {modalContent}
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">{backText}</button>
-                <Link to="/daily-integral" className="btn btn-primary">{startText}</Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </>
-    );
+  const closeAndRouteModal = (route) => {
+    setIsOpen(false); // Close
+    navigate(route); // Go to new route
   };
-  
-  export default Modal;
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  return (
+    <>
+      <Button onClick={openModal}>
+        {buttonText}
+      </Button>
+
+      <Modal show={isOpen} onHide={() => setIsOpen(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>{modalTitle}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {modalContent}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setIsOpen(false)}>
+            {backText}
+          </Button>
+          <Button variant="primary" onClick={() => closeAndRouteModal('/daily-integral')}>
+            {startText}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+};
+
+export default MyModal;
