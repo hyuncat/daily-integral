@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import './App.css';
 
+// fonts
+import '../fonts/DigitalDisplayRegular-ODEO.ttf';
+
 import Navbar from './Navbar/Navbar';
 
 import HomePage from '../pages/HomePage/HomePage';
