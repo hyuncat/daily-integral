@@ -16,10 +16,9 @@ function HomePage () {
             daily-integral
         </h1>
       </div>
-      <CurrentDate />
-      <Countdown />
+      <CurrentDate fontSize={'1.5em'}/>
       <Modal 
-        buttonText="Show today's integral" 
+        buttonText="show today's integral" 
         modalTitle="Ready?" 
         modalContent={<>
           <p>The goal is to find the solution the fastest, and in the least number of attempts. The timer will begin once you press start.</p>
@@ -28,6 +27,9 @@ function HomePage () {
         backText="Back" 
         startText="Start timer" 
       />
+      <div className="mt-3">
+        <Countdown />
+      </div>
     </div>
   );
 }

@@ -10,6 +10,7 @@ import Navbar from './Navbar/Navbar';
 
 import HomePage from '../pages/HomePage/HomePage';
 import DailyIntegralPage from '../pages/DailyIntegralPage/DailyIntegralPage';
+import LeaderboardPage from '../pages/LeaderboardPage/LeaderboardPage';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/daily-integral" element={<DailyIntegralPage />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
         </Routes>
       </div>
     </Router>

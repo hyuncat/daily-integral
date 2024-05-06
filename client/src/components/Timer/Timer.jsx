@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 import './Timer.css';
 
 function Timer() {
@@ -30,7 +32,14 @@ function Timer() {
   }
 
   return (
-    <p className="timer-p">{formatTime()}</p>
+    <Card style={{ display: 'inline-block' }}>
+      <Card.Header>time elapsed</Card.Header>
+      <Card.Body>
+      <Card.Text className="timer-p">
+        {formatTime()}
+      </Card.Text>
+    </Card.Body>
+    </Card>
   );
 }
 

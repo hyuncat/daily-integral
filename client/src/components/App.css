@@ -37,6 +37,19 @@
   color: rgb(0, 0, 0);
 }
 
+.page-heading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 30px;
+}
+
+.page-heading {
+  font-size: 2em;
+  color: rgb(0, 0, 0);
+}
+
 .integral {
   font-size: 2.5em;
   color: rgb(0, 0, 0);

@@ -1,8 +1,9 @@
 import React from 'react';
 import './CurrentDate.css';
 
-function CurrentDate() {
+function CurrentDate({ fontSize }) {
     // State returns a pair: The current state value and a function that lets you update it.
+    // TODO: only refresh the date when it gets close to midnight
     const [date, setDate] = React.useState(new Date());
   
     React.useEffect(() => {
@@ -16,11 +17,13 @@ function CurrentDate() {
     }, []);
   
     return (
-        <div className="current-date-container">
-            <p className="current-date">
+        <>
+          <div className="current-date-container">
+            <p className="current-date" style={{ fontSize: `${fontSize}` }}>
                 {date.toDateString().toLowerCase()}
             </p>
-        </div>
+          </div>
+        </>
     );
   }
   
