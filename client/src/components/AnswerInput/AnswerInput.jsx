@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addStyles, EditableMathField } from 'react-mathquill';
 import { Button, Form, Alert } from 'react-bootstrap';
+
+import UserContext from '../../contexts/UserContext';
+import UserEntryContext from '../../contexts/UserEntryContext';
 
 // inserts the required css to the <head> block.
 // you can skip this, if you want to do that by yourself.
@@ -10,32 +13,30 @@ addStyles()
 function AnswerInput({ time, n_attempts, setAttempts, soln }) {
   const [latex, setLatex] = useState('');
   const [falseAlarm, setFalseAlarm] = useState(false);
-  const navigate = useNavigate();
+  const { user } = useContext(UserContext);
+  const { setUserEntry } = useContext(UserEntryContext); 
 
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // TODO: make error checking more sophisticated
     if (latex !== soln) {
       setFalseAlarm(true);
       setAttempts(prevAttempts => prevAttempts + 1);
 
-      // hide false alarm after 3 seconds
       setTimeout(() => {
         setFalseAlarm(false);
       }, 3000);
     } 
     else {
       setFalseAlarm(false);
-      navigate('/leaderboard', { 
-        state: { 
-          answer: latex, 
-          time: time, 
-          n_attempts: n_attempts
-        } 
-      });
-  }}
+      setUserEntry({ username: user ? user.username : 'you',
+                     attempts: n_attempts+1, 
+                     time: time });
+      navigate('/leaderboard');
+    }
+  }
 
   return (
     <Form onSubmit={handleSubmit}>

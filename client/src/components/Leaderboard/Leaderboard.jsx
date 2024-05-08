@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
+
+import UserEntryContext from '../../contexts/UserEntryContext';
 
 function formatTime(milliseconds) {
   let totalSeconds = Math.floor(milliseconds / 1000);
@@ -15,9 +17,9 @@ function formatTime(milliseconds) {
   return `${minutes}:${seconds}:${ms}`;
 }
 
-const Leaderboard = ({ userEntry }) => {
+const Leaderboard = () => {
   const [leaderboard, setLeaderboard] = useState([]);
-  console.log('userEntry:', userEntry);
+  const { userEntry } = useContext(UserEntryContext); // get userEntry from UserEntryContext
 
   axios.get('/api/users/leaderboard', { timeout: 5000 }) // 5 seconds timeout
   .then(response => {
