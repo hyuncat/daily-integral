@@ -8,6 +8,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const mongoURI = process.env.MONGODB_URI;
 
+const integralRoutes = require('./routes/integralRoutes');
+
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -17,7 +19,14 @@ connection.once('open', () => {
   console.log('MongoDB database connection established successfully');
 });
 
-// Define API routes and controllers here
+app.use((req, res, next) => {
+  console.log('Request URL:', req.url);
+  next();
+});
+
+// Define API routes
+app.use('/api/integrals', integralRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MathJax, MathJaxContext } from "better-react-mathjax";
 
 import Timer from '../../components/Timer/Timer';
@@ -9,7 +9,32 @@ import Grid from '@mui/material/Grid';
 import './DailyIntegralPage.css';
 
 function DailyIntegralPage() {
-  const [time, setTime] = useState(0); // add this line
+  const [time, setTime] = useState(0); 
+  const [integral, setIntegral] = useState();
+  const [hasFetched, setHasFetched] = useState(false); // New state variable
+
+  useEffect(() => {
+    if (!hasFetched) {
+      const currentDate = new Date();
+      const dateString = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+
+      fetch(`http://localhost:5001/api/integrals/today`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          setIntegral(data.integral);
+          setHasFetched(true); // Set hasFetched to true after successful fetch
+        })
+        .catch(error => {
+          console.error('Fetch error:', error);
+          setHasFetched(true); // Also set hasFetched to true if fetch fails
+        });
+    }
+  }, [hasFetched]); // Depend on hasFetched instead of integral
 
   return (
     <MathJaxContext>
@@ -27,7 +52,7 @@ function DailyIntegralPage() {
         </Grid>
         <div className="integral-container">
           <p className="integral">
-            <MathJax>{"\\[\\int_{2023}^{2025} 2024 \\, dx \\]"}</MathJax>
+            <MathJax>{`\\[${integral || 'Fetching...' }\\]`}</MathJax>
           </p>
         </div>
         <div>

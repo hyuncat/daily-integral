@@ -11,6 +11,8 @@ import Navbar from './Navbar/Navbar';
 import HomePage from '../pages/HomePage/HomePage';
 import DailyIntegralPage from '../pages/DailyIntegralPage/DailyIntegralPage';
 import LeaderboardPage from '../pages/LeaderboardPage/LeaderboardPage';
+import SignUpPage from '../pages/SignUpPage/SignUpPage';
+import LoginPage from '../pages/LoginPage/LoginPage';
 
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/daily-integral" element={<DailyIntegralPage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
         </Routes>
       </div>
     </Router>

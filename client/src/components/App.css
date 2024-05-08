@@ -37,6 +37,11 @@
   color: rgb(0, 0, 0);
 }
 
+.heading {
+  font-size: 2em;
+  color: rgb(0, 0, 0);
+}
+
 .page-heading-container {
   display: flex;
   flex-direction: column;
