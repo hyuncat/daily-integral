@@ -5,10 +5,11 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 const mongoURI = process.env.MONGODB_URI;
 
 const integralRoutes = require('./routes/integralRoutes');
+const userRoutes = require('./routes/userRoutes'); // import user routes
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -26,7 +27,7 @@ app.use((req, res, next) => {
 
 // Define API routes
 app.use('/api/integrals', integralRoutes);
-
+app.use('/api/users', userRoutes); // use user routes
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
