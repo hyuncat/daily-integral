@@ -21,7 +21,7 @@ const Leaderboard = () => {
   const [leaderboard, setLeaderboard] = useState([]);
   const { userEntry } = useContext(UserEntryContext); // get userEntry from UserEntryContext
 
-  axios.get('/api/users/leaderboard', { timeout: 5000 }) // 5 seconds timeout
+  axios.get(`http://localhost:${process.env.REACT_APP_SERVERPORT}/api/users/leaderboard`, { timeout: 5000 }) // 5 seconds timeout
   .then(response => {
     const data = response.data;
     if (userEntry) {

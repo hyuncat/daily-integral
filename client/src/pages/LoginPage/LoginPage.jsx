@@ -3,12 +3,16 @@ import { Form, Button, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import UserContext from '../../contexts/UserContext';
 import AuthNav from '../AuthPage/AuthNav';
+import InfoPageHelper from '../../components/InfoPageHelper/InfoPageHelper';
 
 function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [usernameError, setUsernameError] = useState(); // add state for username error
+    const [passwordError, setPasswordError] = useState(); // add state for password error
     const { setUser } = useContext(UserContext);
     const [activeKey, setActiveKey] = useState("/login"); 
+    const [loginSuccess, setLoginSuccess] = useState(false); 
     const navigate = useNavigate();
 
     const handleSubmit = (event) => {
@@ -24,18 +28,39 @@ function LoginPage() {
                 password: password,
             }),
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.error);
+                });
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.token) {
                 localStorage.setItem('token', data.token); // save the token in local storage
                 setUser({ username: username }); // set the user in the global state
-                navigate('/'); // navigate to the home page
+                setLoginSuccess(true); // set login success to true
+
+                setTimeout(() => {
+                    navigate('/'); // navigate to the home page
+                }, 2000); // delay of 2 seconds
             }
         })
         .catch((error) => {
             console.error('Error:', error);
+            if (error.message === 'invalid username') {
+                setUsernameError('username does not exist');
+            } else if (error.message === 'invalid password') {
+                setUsernameError('');
+                setPasswordError('incorrect password');
+            }
         });
     };
+
+    if (loginSuccess) {
+        return <InfoPageHelper msg="you are now logged in!" />;
+    }
 
     return (
         <>
@@ -45,11 +70,13 @@ function LoginPage() {
                 <h1 className='heading'>login</h1>
                 <Form.Group className="mb-3" controlId="username">
                     <Form.Label>username</Form.Label>
-                    <Form.Control type="text" value={username} onChange={e => setUsername(e.target.value)} />
+                    <Form.Control type="text" value={username} onChange={e => setUsername(e.target.value)} isInvalid={!!usernameError} />
+                    <Form.Control.Feedback type="invalid">{usernameError}</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="password">
                     <Form.Label>password</Form.Label>
-                    <Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} />
+                    <Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} isInvalid={!!passwordError} />
+                    <Form.Control.Feedback type="invalid">{passwordError}</Form.Control.Feedback>
                 </Form.Group>
                 <Button variant="primary" type="submit">login</Button>
             </Form>

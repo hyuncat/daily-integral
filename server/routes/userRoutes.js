@@ -28,12 +28,12 @@ router.post('/login', async (req, res) => {
 
   const user = await User.findOne({ username });
   if (!user) {
-    return res.status(400).send({ error: 'Invalid username or password' });
+    return res.status(400).send({ error: 'invalid username' });
   }
 
   const isPasswordMatch = await bcrypt.compare(password, user.password);
   if (!isPasswordMatch) {
-    return res.status(400).send({ error: 'Invalid username or password' });
+    return res.status(400).send({ error: 'invalid password' });
   }
   
   console.log(`user logged in: ${username}`); // log the username
@@ -41,6 +41,31 @@ router.post('/login', async (req, res) => {
   const token = jwt.sign({ userId: user._id }, secretKey); 
   res.send({ token });
 });
+
+
+router.put('/post-entry', async (req, res) => {
+  const { username, n_attempts, time } = req.body;
+
+  try {
+    const date = new Date().toISOString().split('T')[0]; // get the current date in YYYY-MM-DD format
+
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.previousIntegrals.push({ date: date, n_attempts: n_attempts, time: time });
+
+    await user.save();
+
+    res.json({ message: 'User updated successfully' });
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 
 router.get('/leaderboard', async (req, res) => {
   // Get current date in YYYY-MM-DD format
@@ -50,14 +75,19 @@ router.get('/leaderboard', async (req, res) => {
     // Fetch all users
     const users = await User.find();
 
+    // Filter users who have a previousIntegral for the current date
+    const usersWithTodaysIntegral = users.filter(user => 
+      user.previousIntegrals.some(integral => integral.date === currentDate)
+    );
+
     // Map users to leaderboard entries
-    const leaderboard = users.map(user => {
+    const leaderboard = usersWithTodaysIntegral.map(user => {
       // Filter previousIntegrals for the current date
       const todaysIntegrals = user.previousIntegrals.filter(integral => integral.date === currentDate);
 
       return {
         username: user.username,
-        attempts: todaysIntegrals.reduce((total, integral) => total + integral.num_attempts, 0),
+        attempts: todaysIntegrals.reduce((total, integral) => total + integral.n_attempts, 0),
         time: todaysIntegrals.reduce((total, integral) => total + integral.time, 0)
       };
     });

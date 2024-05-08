@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { addStyles, EditableMathField } from 'react-mathquill';
 import { Button, Form, Alert } from 'react-bootstrap';
 
@@ -18,9 +19,9 @@ function AnswerInput({ time, n_attempts, setAttempts, soln }) {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => { // add async keyword here
     event.preventDefault();
-
+  
     if (latex !== soln) {
       setFalseAlarm(true);
       setAttempts(prevAttempts => prevAttempts + 1);
@@ -31,10 +32,34 @@ function AnswerInput({ time, n_attempts, setAttempts, soln }) {
     } 
     else {
       setFalseAlarm(false);
-      setUserEntry({ username: user ? user.username : 'you',
-                     attempts: n_attempts+1, 
-                     time: time });
-      navigate('/leaderboard');
+      const newUserEntry = { username: user ? user.username : 'you', n_attempts: n_attempts+1, time };
+      setUserEntry(newUserEntry);
+  
+      // If the user is logged in, update their document in the database
+      if (user) {
+        try {
+          await fetch(`http://localhost:${process.env.REACT_APP_SERVERPORT}/api/users/post-entry`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newUserEntry),
+          })
+            .then(response => response.json())
+            .then(data => {
+              // handle the response data
+            })
+            .catch(error => {
+              console.error('Error making request:', error);
+            });
+      
+          navigate('/leaderboard');
+        } catch (error) {
+          console.error('Failed to update user:', error);
+        }
+      } else {
+        navigate('/leaderboard'); 
+      }
     }
   }
 

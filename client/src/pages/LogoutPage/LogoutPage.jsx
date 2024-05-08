@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { Alert, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
+import InfoPageHelper from '../../components/InfoPageHelper/InfoPageHelper';
 import UserContext from '../../contexts/UserContext';
 
 function LogoutPage() {
@@ -15,11 +16,7 @@ function LogoutPage() {
     }, [setUser, navigate]);
 
     return (
-        <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
-        <Alert variant="success">
-            you are now logged out!
-        </Alert>
-    </Container>
+        <InfoPageHelper msg="you are now logged out!" />
     );
 }
 
