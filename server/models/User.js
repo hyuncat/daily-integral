@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   previousIntegrals: [
     {
-      date: { type: Date, required: true },
+      date: { type: String, required: true },
       solutions: [{ type: String, required: true }],
       num_attempts: { type: Number, required: true },
       time: { type: Number, required: true },

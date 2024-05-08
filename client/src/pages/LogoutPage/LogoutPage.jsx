@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { Alert, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-import UserContext from '../../UserContext';
+import UserContext from '../../contexts/UserContext';
 
 function LogoutPage() {
     const { setUser } = useContext(UserContext);

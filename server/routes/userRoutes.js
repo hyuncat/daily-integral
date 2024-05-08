@@ -42,4 +42,31 @@ router.post('/login', async (req, res) => {
   res.send({ token });
 });
 
+router.get('/leaderboard', async (req, res) => {
+  // Get current date in YYYY-MM-DD format
+  const currentDate = new Date().toISOString().split('T')[0];
+
+  try {
+    // Fetch all users
+    const users = await User.find();
+
+    // Map users to leaderboard entries
+    const leaderboard = users.map(user => {
+      // Filter previousIntegrals for the current date
+      const todaysIntegrals = user.previousIntegrals.filter(integral => integral.date === currentDate);
+
+      return {
+        username: user.username,
+        attempts: todaysIntegrals.reduce((total, integral) => total + integral.num_attempts, 0),
+        time: todaysIntegrals.reduce((total, integral) => total + integral.time, 0)
+      };
+    });
+
+    // Send leaderboard as response
+    res.send(leaderboard);
+  } catch (error) {
+    res.status(500).send({ error: 'Error fetching leaderboard' });
+  }
+});
+
 module.exports = router;

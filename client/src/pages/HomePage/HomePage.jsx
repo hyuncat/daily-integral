@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import './HomePage.css';
 
@@ -16,7 +16,7 @@ function HomePage () {
       </div>
       <CurrentDate fontSize={'1.5em'}/>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <span style={{width: "50%", textAlign: 'justify', textAlign: 'center'}}>
+      <span style={{width: "50%", textAlign: 'center'}}>
         <p>Solve a new integral every day! Find the fastest solution in the fewest attempts and see where you rank on the daily leaderboard.</p>
       </span>
       </div>

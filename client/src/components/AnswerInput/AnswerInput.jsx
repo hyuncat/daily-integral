@@ -1,21 +1,41 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addStyles, EditableMathField } from 'react-mathquill';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import { Button, Form, Alert } from 'react-bootstrap';
 
 // inserts the required css to the <head> block.
 // you can skip this, if you want to do that by yourself.
 addStyles()
 
-function AnswerInput({ time }) {
+function AnswerInput({ time, n_attempts, setAttempts, soln }) {
   const [latex, setLatex] = useState('');
+  const [falseAlarm, setFalseAlarm] = useState(false);
   const navigate = useNavigate();
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    navigate('/leaderboard', { state: { answer: latex, time: time } }); // pass answer and time states to leaderboard
-  }
+
+    // TODO: make error checking more sophisticated
+    if (latex !== soln) {
+      setFalseAlarm(true);
+      setAttempts(prevAttempts => prevAttempts + 1);
+
+      // hide false alarm after 3 seconds
+      setTimeout(() => {
+        setFalseAlarm(false);
+      }, 3000);
+    } 
+    else {
+      setFalseAlarm(false);
+      navigate('/leaderboard', { 
+        state: { 
+          answer: latex, 
+          time: time, 
+          n_attempts: n_attempts
+        } 
+      });
+  }}
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -29,6 +49,11 @@ function AnswerInput({ time }) {
           }}
         />
       </Form.Group>
+      {falseAlarm && (
+      <Alert variant="danger" onClose={() => setFalseAlarm(false)} dismissible>
+        incorrect
+      </Alert>
+      )}
       <Button variant="primary" type="submit">
         submit
       </Button>

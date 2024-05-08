@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import UserContext from '../UserContext';
+import UserContext from '../contexts/UserContext';
 import './App.css';
 
 // fonts
@@ -15,6 +15,7 @@ import LeaderboardPage from '../pages/LeaderboardPage/LeaderboardPage';
 import SignUpPage from '../pages/SignUpPage/SignUpPage';
 import LoginPage from '../pages/LoginPage/LoginPage';
 import LogoutPage from '../pages/LogoutPage/LogoutPage';
+import AuthPage from '../pages/AuthPage/AuthPage';
 
 function App() {
   const [showModal, setShowModal] = useState(false)
@@ -32,6 +33,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/logout" element={<LogoutPage />} />
+            <Route path="/auth" element={<AuthPage />} />
           </Routes>
         </div>
       </Router>

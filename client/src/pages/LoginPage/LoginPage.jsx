@@ -1,12 +1,14 @@
 import React, { useState, useContext } from 'react';
 import { Form, Button, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import UserContext from '../../UserContext';
+import UserContext from '../../contexts/UserContext';
+import AuthNav from '../AuthPage/AuthNav';
 
 function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const { setUser } = useContext(UserContext);
+    const [activeKey, setActiveKey] = useState("/login"); 
     const navigate = useNavigate();
 
     const handleSubmit = (event) => {
@@ -36,7 +38,9 @@ function LoginPage() {
     };
 
     return (
-        <Container className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+        <>
+        <AuthNav activeKey={activeKey} setActiveKey={setActiveKey} />
+        <Container className="d-flex justify-content-center align-items-center" style={{ height: '70vh' }}>
             <Form style={{ width: '40%' }} onSubmit={handleSubmit}>
                 <h1 className='heading'>login</h1>
                 <Form.Group className="mb-3" controlId="username">
@@ -50,6 +54,7 @@ function LoginPage() {
                 <Button variant="primary" type="submit">login</Button>
             </Form>
         </Container>
+        </>
     );
 }
 

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
+import axios from 'axios';
 
 function formatTime(milliseconds) {
   let totalSeconds = Math.floor(milliseconds / 1000);
@@ -14,7 +15,26 @@ function formatTime(milliseconds) {
   return `${minutes}:${seconds}:${ms}`;
 }
 
-const Leaderboard = ({ leaderboard }) => {
+const Leaderboard = ({ userEntry }) => {
+  const [leaderboard, setLeaderboard] = useState([]);
+  console.log('userEntry:', userEntry);
+
+  axios.get('/api/users/leaderboard', { timeout: 5000 }) // 5 seconds timeout
+  .then(response => {
+    const data = response.data;
+    if (userEntry) {
+      data.push(userEntry);
+      data.sort((a, b) => a.attempts - b.attempts || a.time - b.time);
+    }
+    setLeaderboard(data);
+  })
+  .catch(error => {
+    console.error('Error fetching leaderboard:', error);
+    if (userEntry) {
+      setLeaderboard([userEntry]);
+    }
+  });
+
   const columns = [
     { field: 'id', headerName: 'rank', width: 90},
     {
