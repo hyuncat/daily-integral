@@ -2,24 +2,19 @@ import React, { useEffect, useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import './Timer.css';
 
-function Timer({ time, setTime }) {
-  const [isActive, setIsActive] = useState(true);
+function Timer() {
+  const [start] = useState(Date.now());
+  const [now, setNow] = useState(start);
 
   useEffect(() => {
-    let interval = null;
-    if (isActive) {
-      interval = setInterval(() => {
-        setTime(time => time + 10);
-      }, 10);
-    } else if (!isActive && time !== 0) {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [isActive, time]);
+    const intervalID = setInterval(() => setNow(Date.now()), 10);
+    return () => clearInterval(intervalID);
+  }, []);
 
   const formatTime = () => {
-    const seconds = `0${Math.floor((time / 1000) % 60)}`.slice(-2);
-    const minutes = `0${Math.floor((time / 60000) % 60)}`.slice(-2);
+    const counter = now - start;
+    const seconds = `0${Math.floor((counter / 1000) % 60)}`.slice(-2);
+    const minutes = `0${Math.floor((counter / 60000) % 60)}`.slice(-2);
 
     return `${minutes}:${seconds}`;
   }
