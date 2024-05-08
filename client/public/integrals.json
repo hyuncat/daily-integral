@@ -1,0 +1,54 @@
+{
+    "integrals": [
+      {
+        "integral": "\\int_{2023}^{2025} 2024 \\, dx",
+        "solution": "4048",
+        "date": "2024-05-07"
+      },
+      {
+        "integral": "\\int \\frac{(x - 1)^{\\log(x+1)}}{(x + 1)^{\\log(x-1)}} \\, dx",
+        "solution": "x+C",
+        "date": "2024-05-08"
+      },
+      {
+        "integral": "\\(x \\log x + 2x) \\, dx",
+        "solution": "\\frac{1}{2} x^2 \\log x + \\frac{2}{3} x^2 + C",
+        "date": "2024-05-09"
+      },
+      {
+        "integral": "\\int \\frac{1}{x \\log x + 2x} \\, dx",
+        "solution": "\\log(\\log x + 2) + C",
+        "date": "2024-05-10"
+      },
+      {
+        "integral": "\\int_{0}^{2\\pi} \\arccos(\\sin x) \\, dx",
+        "solution": "\\pi^2",
+        "date": "2024-05-11"
+      },
+      {
+        "integral": "\\int_{2023}^{2025} 2024 \\, dx",
+        "solution": "4048",
+        "date": "2024-05-12"
+      },
+      {
+        "integral": "\\int \\frac{(x - 1)^{\\log(x+1)}}{(x + 1)^{\\log(x-1)}} \\, dx",
+        "solution": "x+C",
+        "date": "2024-05-13"
+      },
+      {
+        "integral": "\\(x \\log x + 2x) \\, dx",
+        "solution": "\\frac{1}{2} x^2 \\log x + \\frac{2}{3} x^2 + C",
+        "date": "2024-05-14"
+      },
+      {
+        "integral": "\\int \\frac{1}{x \\log x + 2x} \\, dx",
+        "solution": "\\log(\\log x + 2) + C",
+        "date": "2024-05-15"
+      },
+      {
+        "integral": "\\int_{0}^{2\\pi} \\arccos(\\sin x) \\, dx",
+        "solution": "\\pi^2",
+        "date": "2024-05-16"
+      }
+    ]
+  }

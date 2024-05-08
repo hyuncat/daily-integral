@@ -11,30 +11,25 @@ import './DailyIntegralPage.css';
 function DailyIntegralPage() {
   const [time, setTime] = useState(0); 
   const [integral, setIntegral] = useState();
-  const [hasFetched, setHasFetched] = useState(false); // New state variable
 
   useEffect(() => {
-    if (!hasFetched) {
-      const currentDate = new Date();
-      const dateString = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
-
-      fetch(`http://localhost:5001/api/integrals/today`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          setIntegral(data.integral);
-          setHasFetched(true); // Set hasFetched to true after successful fetch
-        })
-        .catch(error => {
-          console.error('Fetch error:', error);
-          setHasFetched(true); // Also set hasFetched to true if fetch fails
-        });
-    }
-  }, [hasFetched]); // Depend on hasFetched instead of integral
+    const currentDate = new Date();
+    const dateString = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+  
+    // current integrals from https://math.mit.edu/~yyao1/pdf/qualifying_round_2024_test.pdf
+    fetch('/integrals.json')
+      .then(response => response.json())
+      .then(data => {
+        const todayIntegral = data.integrals.find(integral => integral.date === dateString);
+  
+        if (todayIntegral) {
+          setIntegral(todayIntegral.integral);
+        } else {
+          console.error('No integral found for today');
+        }
+      })
+      .catch(error => console.error('Fetch error:', error));
+  }, []);
 
   return (
     <MathJaxContext>
