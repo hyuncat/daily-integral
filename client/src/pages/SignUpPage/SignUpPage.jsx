@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Form, Button, Alert, Container } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import UserContext from '../../UserContext';
 
 function SignUpPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [usernameTaken, setUsernameTaken] = useState(false); // add this line
+    const [usernameTaken, setUsernameTaken] = useState(false);
+    const { setUser } = useContext(UserContext);
+    const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
-        console.log('username:', username);
 
         fetch('http://localhost:5001/api/users/signup', {
             method: 'POST',
@@ -25,6 +27,8 @@ function SignUpPage() {
         .then(data => {
             if (data.token) {
                 localStorage.setItem('token', data.token); // save the token in local storage
+                setUser({ username: username }); // set the user in the global state
+                navigate('/'); // navigate to the home page
             } else {
                 setUsernameTaken(true); // show the alert if the username is taken
             }

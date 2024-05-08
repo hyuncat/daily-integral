@@ -1,41 +1,55 @@
-import React from 'react';
-import Alert from 'react-bootstrap/Alert';
+import React, { useState, useContext } from 'react';
+import { Form, Button, Container } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import UserContext from '../../UserContext';
 
 function LoginPage() {
-    fetch('http://localhost:5001/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            username: 'example',
-            password: 'password',
-        }),
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const { setUser } = useContext(UserContext);
+    const navigate = useNavigate();
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        fetch(`http://localhost:${process.env.REACT_APP_SERVERPORT}/api/users/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password,
+            }),
         })
         .then(response => response.json())
         .then(data => {
-            localStorage.setItem('token', data.token); // save the token in local storage
+            if (data.token) {
+                localStorage.setItem('token', data.token); // save the token in local storage
+                setUser({ username: username }); // set the user in the global state
+                navigate('/'); // navigate to the home page
+            }
         })
         .catch((error) => {
             console.error('Error:', error);
-    });
+        });
+    };
+
     return (
-        <div style={{display: 'flex', justifyContent: 'center', height: '100vh'}}>
-            <form style={{width: '40%'}}>
-                <div className="title-container">
-                    <h1 className='heading'>login</h1>
-                </div>
-                <div className="mb-3">
-                    <label for="username" className="form-label">username</label>
-                    <input type="text" className="form-control" id="username" />
-                </div>
-                <div className="mb-3">
-                    <label for="password" className="form-label">password</label>
-                    <input type="password" className="form-control" id="password" />
-                </div>
-                <button type="submit" className="btn btn-primary">login</button>
-            </form>
-        </div>
+        <Container className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+            <Form style={{ width: '40%' }} onSubmit={handleSubmit}>
+                <h1 className='heading'>login</h1>
+                <Form.Group className="mb-3" controlId="username">
+                    <Form.Label>username</Form.Label>
+                    <Form.Control type="text" value={username} onChange={e => setUsername(e.target.value)} />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="password">
+                    <Form.Label>password</Form.Label>
+                    <Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} />
+                </Form.Group>
+                <Button variant="primary" type="submit">login</Button>
+            </Form>
+        </Container>
     );
 }
 

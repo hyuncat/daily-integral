@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import UserContext from '../../UserContext';
 import './Navbar.css';
 
 const Navbar = () => {
+  const { user } = useContext(UserContext);
+
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
       <div className="container-fluid">
@@ -18,8 +21,17 @@ const Navbar = () => {
             <a className="nav-link" href="/leaderboard">leaderboard</a>
           </div>
           <div className="navbar-nav ms-auto"> 
-            <a className="nav-link" href="/login">login</a>
-            <a className="nav-link" href="/signup">sign up</a>
+            {user ? (
+              <>
+                <a className="nav-link" href="/profile">profile</a>
+                <a className="nav-link" href="/logout">logout</a>
+              </>
+            ) : (
+              <>
+                <a className="nav-link" href="/login">login</a>
+                <a className="nav-link" href="/signup">sign up</a>
+              </>
+            )}
           </div>
         </div>
       </div>
