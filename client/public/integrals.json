@@ -12,7 +12,7 @@
       },
       {
         "integral": "\\int (x \\log x + 2x) \\, dx",
-        "solution": "\\frac{1}{2} x^2 \\log x + \\frac{2}{3} x^2 + C",
+        "solution": "\\frac{1}{2}x^2\\log x+\\frac{2}{3}x^2+C",
         "date": "2024-05-09"
       },
       {

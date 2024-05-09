@@ -38,7 +38,7 @@ function AnswerInput({ time, n_attempts, setAttempts, soln }) {
       // If the user is logged in, update their document in the database
       if (user) {
         try {
-          await fetch(`http://localhost:${process.env.REACT_APP_SERVERPORT}/api/users/post-entry`, {
+          await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/users/post-entry`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',

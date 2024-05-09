@@ -13,7 +13,7 @@ function AuthPage() {
     const handleSignUp = (event) => {
         event.preventDefault();
 
-        fetch('http://localhost:5001/api/users/signup', {
+        fetch(`${process.env.REACT_APP_API_BASE_URL}/api/users/signup`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ function AuthPage() {
     const handleLogin = (event) => {
         event.preventDefault();
 
-        fetch(`http://localhost:${process.env.REACT_APP_SERVERPORT}/api/users/login`, {
+        fetch(`${process.env.REACT_APP_API_BASE_URL}/api/users/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

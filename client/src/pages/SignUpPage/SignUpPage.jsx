@@ -24,7 +24,7 @@ function SignUpPage() {
         // Choose the endpoint based on whether userEntry exists
         const endpoint = userEntry ? '/signup-and-post' : '/signup';
     
-        fetch(`http://localhost:5001/api/users${endpoint}`, {
+        fetch(`${process.env.REACT_APP_API_BASE_URL}/api/users${endpoint}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

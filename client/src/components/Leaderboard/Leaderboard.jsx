@@ -30,7 +30,7 @@ const Leaderboard = () => {
 
   useEffect(() => {
     if (!hasFetched) {
-      fetch(`http://localhost:${process.env.REACT_APP_SERVERPORT}/api/users/leaderboard`)
+      fetch(`${process.env.REACT_APP_API_BASE_URL}/api/users/leaderboard`)
         .then(response => response.json())
         .then(data => {
           setLeaderboard(data);
