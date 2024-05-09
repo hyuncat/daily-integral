@@ -4,7 +4,7 @@
 
 Generates a new integral to solve every day. Submit your answer and see how you rank on the daily leaderboard!
 
-The final app is deployed at [daily-integral.vercel.app/](url)!
+The final app is deployed at [daily-integral.vercel.app/](daily-integral.vercel.app/)!
 
 <img width="700" alt="Screenshot 2024-05-08 at 11 59 36 PM" src="https://github.com/hyuncat/daily-integral/assets/114366569/3e5cc11b-01d3-485d-8f14-5886402851fe">
 
