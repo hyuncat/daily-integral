@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useContext } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom'; // import useNavigate
 import { Button } from 'react-bootstrap';
 
 import UserContext from '../../contexts/UserContext';
@@ -11,6 +11,7 @@ import './LeaderboardPage.css';
 
 function LeaderboardPage() {
   const location = useLocation();
+  const navigate = useNavigate(); // get the navigate function
   const answer = location.state?.answer;
   const time = location.state?.time; // get time from location state
   const n_attempts = location.state?.n_attempts; // get attempts from location state
@@ -18,18 +19,16 @@ function LeaderboardPage() {
   const { user } = useContext(UserContext); // get user from UserContext
   const { userEntry, setUserEntry } = useContext(UserEntryContext); // get userEntry and setUserEntry from UserEntryContext
 
-  // useEffect(() => {
-  //   if (answer && time !== undefined) {
-  //     setUserEntry({ username: 'you', attempts: n_attempts+1, time });
-  //   }
-  // }, [answer, time, n_attempts]); // trigger effect whenever 'answer', 'time', or 'n_attempts' changes
+  useEffect(() => {
+    if (answer && time !== undefined) {
+      setUserEntry({ username: 'you', attempts: n_attempts+1, time });
+    }
+  }, [answer, time, n_attempts]); // trigger effect whenever 'answer', 'time', or 'n_attempts' changes
 
-  // useEffect(() => {
-  //   console.log('userEntry changed:', userEntry);
-  // }, [userEntry]);
-
-  const handleLogin = (username) => {
-    setUserEntry(prevEntry => ({ ...prevEntry, username }));
+  const handleLogin = () => {
+    if (userEntry && !user) {
+      navigate('/login'); // navigate to the login page
+    }
   };
 
   return (

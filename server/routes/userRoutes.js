@@ -23,6 +23,28 @@ router.post('/signup', async (req, res) => {
   }
 });
 
+router.post('/signup-and-post', async (req, res) => {
+  const { username, password, n_attempts, time } = req.body;
+
+  try {
+    const date = new Date().toISOString().split('T')[0]; // get the current date in YYYY-MM-DD format
+    const user = new User({ 
+      username, 
+      password, 
+      previousIntegrals: [{ date, n_attempts, time }] 
+    });
+    await user.save();
+
+    console.log(`account created: ${username}`); // log the account information
+
+    const token = jwt.sign({ userId: user._id }, secretKey); 
+    res.send({ token });
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 

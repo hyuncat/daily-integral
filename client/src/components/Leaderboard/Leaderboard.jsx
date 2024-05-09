@@ -74,11 +74,15 @@ const Leaderboard = () => {
     }
   ];
 
-  // Sort and format the data right before rendering
-  const sortedData = [...leaderboard];
-  sortedData.sort((a, b) => a.n_attempts - b.n_attempts || a.time - b.time);
+  const [sortedLeaderboard, setSortedLeaderboard] = useState([]);
 
-  const rows = leaderboard.map((entry, index) => ({
+  useEffect(() => {
+    const newSortedLeaderboard = [...leaderboard];
+    newSortedLeaderboard.sort((a, b) => a.n_attempts - b.n_attempts || a.time - b.time);
+    setSortedLeaderboard(newSortedLeaderboard);
+  }, [leaderboard]);
+
+  const rows = sortedLeaderboard.map((entry, index) => ({
     id: index + 1,
     username: entry.username,
     n_attempts: entry.n_attempts || entry.attempts, // sorry this is such a bandaid solution

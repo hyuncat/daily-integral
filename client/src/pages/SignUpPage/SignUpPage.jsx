@@ -1,21 +1,30 @@
 import React, { useState, useContext } from 'react';
 import { Form, Button, Alert, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+
 import UserContext from '../../contexts/UserContext';
+import UserEntryContext from '../../contexts/UserEntryContext';
+
 import AuthNav from '../AuthPage/AuthNav';
 
 function SignUpPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [usernameTaken, setUsernameTaken] = useState(false);
+
     const { setUser } = useContext(UserContext);
+    const { userEntry, setUserEntry } = useContext(UserEntryContext);
+
     const [activeKey, setActiveKey] = useState("/signup"); 
     const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
-        fetch('http://localhost:5001/api/users/signup', {
+    
+        // Choose the endpoint based on whether userEntry exists
+        const endpoint = userEntry ? '/signup-and-post' : '/signup';
+    
+        fetch(`http://localhost:5001/api/users${endpoint}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -23,6 +32,7 @@ function SignUpPage() {
             body: JSON.stringify({
                 username: username,
                 password: password,
+                ...userEntry, // spread userEntry into the request body
             }),
         })
         .then(response => response.json())
@@ -30,7 +40,13 @@ function SignUpPage() {
             if (data.token) {
                 localStorage.setItem('token', data.token); // save the token in local storage
                 setUser({ username: username }); // set the user in the global state
-                navigate('/'); // navigate to the home page
+    
+                if (userEntry) {
+                    console.log('User entry posted during signup');
+                    navigate('/leaderboard'); // navigate to the leaderboard page
+                } else {
+                    navigate('/'); // navigate to the home page
+                }
             } else {
                 setUsernameTaken(true); // show the alert if the username is taken
             }
