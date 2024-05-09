@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { MathJax, MathJaxContext } from "better-react-mathjax";
+import Card from 'react-bootstrap/Card';
 
 import Timer from '../../components/Timer/Timer';
 import CurrentDate from '../../components/CurrentDate/CurrentDate';
@@ -10,7 +11,7 @@ import Grid from '@mui/material/Grid';
 import './DailyIntegralPage.css';
 
 function DailyIntegralPage() {
-  const [time, setTime] = useState(0); 
+  const [time, setTime] = useState(Date.now()); 
   const [integral, setIntegral] = useState();
   const [solution, setSolution] = useState();
   const [attempts, setAttempts] = useState(0);
@@ -45,7 +46,19 @@ function DailyIntegralPage() {
         <Grid container spacing={3}>
           <Grid item xs={4} md={3} lg={2}>
             <div className="timer-container" style={{ textAlign: 'left' }}>
-              <Timer time={time} setTime={setTime} /> {/* pass time and setTime as props */}
+              <div>
+              <Timer onTimeUpdate={setTime} style={{width: '125px'}} /> {/* pass time and setTime as props */}
+              </div>
+              <div>
+                <Card style={{ display: 'inline-block', marginTop: '10px', width: '125px'}}>
+                  <Card.Header>attempts</Card.Header>
+                  <Card.Body>
+                    <Card.Text style={{fontSize: '1.5em'}}>
+                      {attempts}
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </div>
             </div>
           </Grid>
           <Grid item xs={4} md={6} lg={8} style={{marginTop: '20px'}}>
@@ -60,9 +73,6 @@ function DailyIntegralPage() {
         </div>
         <div>
           <AnswerInput time={time} n_attempts={attempts} setAttempts={setAttempts} soln={solution}/> {/* pass time and onAnswerSubmit as props */}
-        </div>
-        <div className="attempts-container">
-          <p>Attempts: {attempts}</p>
         </div>
       </div>
     </MathJaxContext>
