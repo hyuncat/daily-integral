@@ -35,7 +35,7 @@ Context API is also used to keep track of whether a user is signed in or not. On
 Making an app of this complexity showed just how quickly asynchronous operations can get messy. Especially when rendering database content from MongoDB, I had to account for the time it would take for data to be posted to/fetched from the database, and the myriad of errors which sprang from not having particular data come in before it needed to be used.
 
 ### 2. Implementing secure user authentication
-I learned how to use bcrypt and hash user passwords before storing them. When the user logs in, their password is hashed again and compared to the stored hash. This way, no one can ever find out the original passwords users put in. I chose bcrypt because it handles both hashing and salting passwords, which adds a layer of security and preventing against rainbow hash attacks.
+I wanted to find an authentication flow where users could provide passwords without having them be exposed to the database administrator. This naturally led me to using the bcrypt library in the final aplication. Because it handles both hashing and salting passwords, it felt like the most comprehensive choice.
 
 ### 3. React is a front-end library
 This project made me experience first-hand just how front-end oriented React was. While creating the various components in the website, I learned a lot about the different CSS stylings, such as:
