@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import axios from 'axios';
 
+import UserContext from '../../contexts/UserContext';
 import UserEntryContext from '../../contexts/UserEntryContext';
 
 function formatTime(milliseconds) {
@@ -17,25 +17,38 @@ function formatTime(milliseconds) {
   return `${minutes}:${seconds}:${ms}`;
 }
 
+function timeToMilliseconds(time) {
+  const [minutes, seconds, milliseconds] = time.split(':').map(Number);
+  return minutes * 60 * 1000 + seconds * 1000 + milliseconds;
+}
+
 const Leaderboard = () => {
   const [leaderboard, setLeaderboard] = useState([]);
+  const { user } = useContext(UserContext); // get user from UserContext
   const { userEntry } = useContext(UserEntryContext); // get userEntry from UserEntryContext
+  const [hasFetched, setHasFetched] = useState(false);
 
-  axios.get(`http://localhost:${process.env.REACT_APP_SERVERPORT}/api/users/leaderboard`, { timeout: 5000 }) // 5 seconds timeout
-  .then(response => {
-    const data = response.data;
-    if (userEntry) {
-      data.push(userEntry);
-      data.sort((a, b) => a.attempts - b.attempts || a.time - b.time);
+  useEffect(() => {
+    if (!hasFetched) {
+      fetch(`http://localhost:${process.env.REACT_APP_SERVERPORT}/api/users/leaderboard`)
+        .then(response => response.json())
+        .then(data => {
+          setLeaderboard(data);
+          setHasFetched(true);
+        })
+        .catch(error => {
+          console.error('Error fetching leaderboard:', error);
+        })
+        .finally(() => {
+          if (userEntry && !user) {
+            setLeaderboard(prevLeaderboard => {
+              const newUserEntry = {...userEntry, time: userEntry.time};
+              return [...prevLeaderboard, newUserEntry];
+            });
+          }
+        });
     }
-    setLeaderboard(data);
-  })
-  .catch(error => {
-    console.error('Error fetching leaderboard:', error);
-    if (userEntry) {
-      setLeaderboard([userEntry]);
-    }
-  });
+  }, [userEntry, user, hasFetched]);
 
   const columns = [
     { field: 'id', headerName: 'rank', width: 90},
@@ -46,7 +59,7 @@ const Leaderboard = () => {
       editable: false,
     },
     {
-      field: 'attempts',
+      field: 'n_attempts',
       headerName: '# attempts',
       type: 'number',
       width: 110,
@@ -61,10 +74,14 @@ const Leaderboard = () => {
     }
   ];
 
+  // Sort and format the data right before rendering
+  const sortedData = [...leaderboard];
+  sortedData.sort((a, b) => a.n_attempts - b.n_attempts || a.time - b.time);
+
   const rows = leaderboard.map((entry, index) => ({
     id: index + 1,
     username: entry.username,
-    attempts: entry.attempts,
+    n_attempts: entry.n_attempts || entry.attempts, // sorry this is such a bandaid solution
     time: formatTime(entry.time) // use formatTime here
   }));
 

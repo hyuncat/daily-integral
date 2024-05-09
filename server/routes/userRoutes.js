@@ -87,7 +87,7 @@ router.get('/leaderboard', async (req, res) => {
 
       return {
         username: user.username,
-        attempts: todaysIntegrals.reduce((total, integral) => total + integral.n_attempts, 0),
+        n_attempts: todaysIntegrals.reduce((total, integral) => total + integral.n_attempts, 0),
         time: todaysIntegrals.reduce((total, integral) => total + integral.time, 0)
       };
     });

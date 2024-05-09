@@ -19,7 +19,7 @@ function AnswerInput({ time, n_attempts, setAttempts, soln }) {
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (event) => { // add async keyword here
+  const handleSubmit = async (event) => {
     event.preventDefault();
   
     if (latex !== soln) {

@@ -11,10 +11,10 @@ import Grid from '@mui/material/Grid';
 import './DailyIntegralPage.css';
 
 function DailyIntegralPage() {
-  const [time, setTime] = useState(Date.now()); 
+  const [time, setTime] = useState(0); 
   const [integral, setIntegral] = useState();
   const [solution, setSolution] = useState();
-  const [attempts, setAttempts] = useState(0);
+  const [n_attempts, setAttempts] = useState(0);
 
   useEffect(() => {
     const currentDate = new Date();
@@ -54,7 +54,7 @@ function DailyIntegralPage() {
                   <Card.Header>attempts</Card.Header>
                   <Card.Body>
                     <Card.Text style={{fontSize: '1.5em'}}>
-                      {attempts}
+                      {n_attempts}
                     </Card.Text>
                   </Card.Body>
                 </Card>
@@ -72,7 +72,7 @@ function DailyIntegralPage() {
           </p>
         </div>
         <div>
-          <AnswerInput time={time} n_attempts={attempts} setAttempts={setAttempts} soln={solution}/> {/* pass time and onAnswerSubmit as props */}
+          <AnswerInput time={time} n_attempts={n_attempts} setAttempts={setAttempts} soln={solution}/> {/* pass time and onAnswerSubmit as props */}
         </div>
       </div>
     </MathJaxContext>
